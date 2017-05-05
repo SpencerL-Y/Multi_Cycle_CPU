@@ -79,6 +79,31 @@ module alu(
                      CarryOut = 0; Overflow = 0;
                 end
                 end
+                3'b011: begin
+                /* TODO: 011 Function SLL
+                 *           Operation sll
+                 */
+                 Result = B << A;
+                 CarryOut = 0; Overflow = 0;
+                end
+                3'b100: begin
+                /* TODO: 100 Function LUI
+                 *           Operation extend 0^16
+                 */                
+                    Result = B << 16;
+                    CarryOut = 0; Overflow = 0;
+                 end
+                 3'b101: begin
+                /* TODO: 101 Function SLTIU
+                  *           Operation unsigned slt
+                  */            
+                  if(A<B) begin
+                    Result = 1; CarryOut = 0; Overflow = 0;
+                  end
+                  else begin
+                    Result = 0; CarryOut = 0; Overflow = 0;
+                  end
+                  end                     
                 default: begin
                     Result = 0;
                     CarryOut = 0; Overflow = 0;

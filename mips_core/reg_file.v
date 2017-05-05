@@ -30,7 +30,7 @@ module reg_file(
                     r[i]<= 32'b0;//Initialize register file
               end
             end
-            if(wen && waddr != 0) begin
+            else if(wen && waddr != 0) begin
                 r[waddr] <= wdata;
             end
         end
