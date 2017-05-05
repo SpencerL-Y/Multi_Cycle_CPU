@@ -1,8 +1,8 @@
 # MIPS Multi-Cycle CPU
 
 - CPU structure
-![](structure.jpg)
+![](structure.JPG)
 - CPU FSM example
-![](exampleFSM.jpg)
+![](exampleFSM.JPG)
 
 This project is a modification of Xilinx-prj2. 
