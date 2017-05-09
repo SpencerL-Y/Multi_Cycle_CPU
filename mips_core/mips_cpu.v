@@ -55,7 +55,7 @@ module mips_cpu(
    
     assign low26 = Instruction_reg[25:0];
     assign ext_low26 = low26 << 2;
-    assign jumAddr = {PC[31:28],ext_low26};
+    assign jumpAddr = {PC[31:28],ext_low26};
 //REGISTER FILES WIRES
     wire [4:0]raddr1;
     wire [4:0]raddr2;
@@ -130,7 +130,7 @@ module mips_cpu(
                 newPC = ALUOut;
             end
             2'b10: begin
-                newPC = jumAddr;
+                newPC = jumpAddr;
             end
             default: begin
                 newPC = Result;
@@ -197,7 +197,7 @@ module mips_cpu(
 	           PCWrite = 1; PCSource = 2'b10; 
 	           MemRead = 0; ALUSrcA = 2'b00; IRWrite = 0; ALUSrcB = 2'b00;
                ALUOp = 2'b00; PCWriteCond = 0;
-               MemWrite = 0; MemtoReg[1]=(Op == 6'b000011)? 1: 0;MemtoReg[0] = 0; RegWrite = 0; RegDst = (Op == 6'b000011)?2'b10 : 2'b00;
+               MemWrite = 0; MemtoReg[1]=(Op == 6'b000011)? 1: 0;MemtoReg[0] = 0; RegWrite = (Op == 6'b000011)?1:0; RegDst = (Op == 6'b000011)?2'b10 : 2'b00;
 	       end
 	       4'b1010: begin//R-type:ADDU, JR, SLL, SLT, 
 	           MemRead = 0; IRWrite = 0; ALUSrcB = 2'b00;
@@ -207,7 +207,7 @@ module mips_cpu(
 	       end
 	       4'b1011: begin//R-type: JR
 	           MemRead = 0; ALUSrcA = 2'b00; IRWrite = 0; ALUSrcB = 2'b00;
-               ALUOp = 2'b00; PCSource = 2'b00; PCWrite = 1; PCWriteCond = 0;
+               ALUOp = 2'b00; PCSource = 2'b01; PCWrite = 1; PCWriteCond = 0;
                MemWrite = 0; MemtoReg = 2'b00; RegWrite = 0; RegDst = 2'b00;
 	       end
 	       4'b1100: begin//LUI
@@ -244,10 +244,10 @@ module mips_cpu(
 	               ALUop = 3'b111;//STLI
 	           end
 	           6'b001011: begin
-	               ALUop = 3'b010;//STLIU
+	               ALUop = 3'b101;//STLIU
 	           end
 	           6'b001111: begin
-	               ALUop = 3'b110;//LUI
+	               ALUop = 3'b100;//LUI
 	           end
 	           6'b000000: begin
 	               case(Instruction_reg[5:0])
@@ -322,6 +322,9 @@ module mips_cpu(
                         6'b001010, 6'b001011: begin
                             newState = 4'b1101;
                         end//SLTI
+                        default: begin
+                            newState = 4'b0000;
+                        end
                     endcase
                 end
                 4'b0010: begin
@@ -332,6 +335,9 @@ module mips_cpu(
                          6'b101011: begin
                              newState = 4'b0101;
                          end//SW 
+                         default: begin
+                            newState = 4'b0000;
+                         end
                      endcase
                 end
                 4'b0011: begin
@@ -357,6 +363,9 @@ module mips_cpu(
                     newState = 4'b0111;
                 end
                 4'b0100, 4'b0101, 4'b0111, 4'b1000, 4'b1001,4'b1011: begin
+                    newState = 4'b0000;
+                end
+                default: begin
                     newState = 4'b0000;
                 end
             endcase

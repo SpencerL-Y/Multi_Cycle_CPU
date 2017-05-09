@@ -36,10 +36,22 @@ reg [31:0]	mem [MEM_WIDTH - 1:0];
 `define LW(rt, base, off) {6'b100011, base, rt, off}
 `define SW(rt, base, off) {6'b101011, base, rt, off}
 `define BNE(rs, rt, off) {6'b000101, rs, rt, off}
-
+`define ADDU(rs, rt, rd) {6'b000000, rs, rt, rd, 5'b00000, 6'b100001}
+`define BEQ(rs, rt, offset) {6'b000100, rs, rt, offset}
+`define B(offset) {6'b000100, 5'b00000, 5'b00000, offset}
+`define J(instr_index) {6'b000010, instr_index}
+`define JAL(instr_index) {6'b000011, instr_index}
+`define JR(rs, hint) {6'b000000, rs, 5'b00000, 5'b00000, hint, 6'b001000}
+`define LUI(rt, imme) {6'b001111, 5'b00000, rt, imme}
+`define OR(rd, rs, rt) {6'b000000, rs, rt, rd, 11'b00000100101} 
+`define SLL(rt, rd, ra) {11'b00000000000, rt, rd, ra, 6'b000000}
+`define SLT(rd, rs, rt) {6'b000000, rs, rt, rd, 11'b00000101010}
+`define SLTI(rs,rt, imme) {6'b001010, rs, rt, imme}
+`define SLTIU(rs, rt, imme) {6'b001011, rs, rt, imme}
 `ifdef MIPS_CPU_SIM
 	//Add memory initialization here
 	initial begin
+	/*
 		// fill memory region [100, 200) with [0, 100)
 		mem[0] = `ADDIU(5'd1, 5'd0, 16'd100);
 		mem[1] = `ADDIU(5'd2, 5'd0, 16'd0);
@@ -55,7 +67,40 @@ reg [31:0]	mem [MEM_WIDTH - 1:0];
 		mem[9] = `BNE(5'd1, 5'd2, 16'hfffc);
 
 		mem[10] = `BNE(5'd1, 5'd0, 16'hffff);
+		*/
+		
+		// Origin
+		/*
+		mem[0] = `ADDIU(5'd1, 5'd0, 16'd12);
+        mem[1] = `ADDIU(5'd2, 5'd0, 16'b0);
+	    mem[2] = `ADDU(5'd1, 5'd2, 5'd3);
+	    mem[3] = `BEQ(5'd1, 5'd1, 16'd9);
+	    //mem[4] = `B(16'b1111111111111011);
+	    //mem[5] = `J(26'd3);
+	    //mem[6] = `JAL(26'd3);
+	    //mem[7] = `JR(5'd1, 5'b00000);
+	    //mem[8] = `LUI(5'd4, 16'd1);
+	    //mem[9] = `OR(5'd5, 5'd1, 5'd2);
+	    //mem[10] = `SLL(5'd1, 5'd6, 5'd2);
+	    //mem[11] = `SLT(5'd7, 5'd2, 5'd1);
+	    //mem[12] = `SLTI(5'd2, 5'd8, 16'd1);
+	    mem[13] = `SLTIU(5'd2, 5'd9, 16'd1);
+	    
+	    */
+	    //Singel Debug
+	    
+	    `include "C:/Users/My-PC/Desktop/project3_on_board_flow_student/ready_for_test/sim/bubble-sort.vh"
 	end
+	always@(posedge clk) begin
+	         if(mem[3] == 32'b0) begin
+	                      $display("pass");
+	                      $finish;
+	         end         
+	         else if(mem[3] == 32'b1) begin
+	                      $display("fail");
+	                      $finish;         
+	         end     
+     end
 `endif
 
 always @ (posedge clk)

@@ -24,13 +24,13 @@ module reg_file(
         reg [`ADDR_WIDTH:0] i;
         assign rdata1 = r[raddr1];
         assign rdata2 = r[raddr2];
-        always@(posedge clk)begin
-            if(rst)begin
-              for(i=0;i<(1<<`ADDR_WIDTH);i=i+1) begin
-                    r[i]<= 32'b0;//Initialize register file
-              end
+        initial begin
+            for(i=0;i<(1<<`ADDR_WIDTH);i=i+1) begin
+                r[i]<= 32'b0;//Initialize register file
             end
-            else if(wen && waddr != 0) begin
+        end
+        always@(posedge clk)begin
+        if(wen && waddr != 0) begin
                 r[waddr] <= wdata;
             end
         end
