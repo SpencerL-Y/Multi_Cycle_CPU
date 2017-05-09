@@ -6,7 +6,7 @@
 ![](exampleFSM.JPG)
 
 This project is a modification of Xilinx-prj2. 
-###Post-timing Implementation Simulation passed!
+### Post-timing Implementation Simulation passed!
 
 Instructions Implemented(MIPS):
 - ADDU
