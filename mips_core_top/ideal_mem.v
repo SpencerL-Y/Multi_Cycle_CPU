@@ -89,7 +89,7 @@ reg [31:0]	mem [MEM_WIDTH - 1:0];
 	    */
 	    //Singel Debug
 	    
-	    `include "C:/Users/My-PC/Desktop/project3_on_board_flow_student/ready_for_test/sim/bubble-sort.vh"
+	    `include "C:/Users/My-PC/Desktop/project3_on_board_flow_student/ready_for_test/sim/pascal.vh"
 	end
 	always@(posedge clk) begin
 	         if(mem[3] == 32'b0) begin
